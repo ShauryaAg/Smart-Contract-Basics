@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Contract</title>
+
+    <script src="./node_modules/web3/dist/web3.js"></script>
+</head>
+
+<body>
+    <input type="text" name="input" id="input" placeholder="Enter Name">
+    <button id="button">Set Name</button>
+    <pre id="output"></pre>
+
+    <script>
+        var web3;
+
+        if (typeof web3 !== "undefined") {
+            web3 = new Web3(web3.currentProvider)
+        }
+        else {
+            web3 = new Web3(new Web3.providers.HttpProvider("https//:localhost:8545"))
+        }
+
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        abi = [
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_name",
+                        "type": "string"
+                    }
+                ],
+                "name": "setName",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "getName",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "name",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ]
+
+        var contract = new web3.eth.Contract(abi, "0xE5dac31337bdA31b1039f1597F0E5b963bA2E1c5")
+
+        console.log(contract)
+
+        var output = document.getElementById("output")
+        var input = document.getElementById("input")
+        var button = document.getElementById("button")
+
+        button.addEventListener("click", function () {
+            contract.methods.setName(input.value)
+            console.log(contract.methods.getName())
+            output.innerText = contract.methods.getName()
+        })
+    </script>
+
+</body>
+
+</html>
